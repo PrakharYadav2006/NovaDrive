@@ -53,4 +53,6 @@ Rebuild the data bundle after editing sources:  `python3 build/build_lighthouse_
 - Ask Lighthouse is **not a live language model**: it answers a fixed set of question types from the same data and logic.
 - Action labels refine the scorecard's "next step" (e.g. "Search alternate now" splits into SEARCH ALTERNATE / REVIEW / QUALIFY / VERIFY FIRST); the original next step stays visible under "Why this action?".
 "# NovaDrive" 
+
+
 [![Architecture diagram of prakharyadav2006/novadrive](https://gitdiagram.com/prakharyadav2006/novadrive/diagram.png)](https://gitdiagram.com/prakharyadav2006/novadrive?utm_source=readme&utm_medium=picture)
