@@ -1,87 +1,86 @@
 # Project LIGHTHOUSE
 
-A supplier-risk and sourcing decision tool for NovaDrive's CRO. I built it for the NovaDrive case competition, so everything in here runs on the fictional case data. No real companies, no real numbers.
+Supplier risk and sourcing decision platform for NovaDrive's CRO. I built this for the NovaDrive case competition, so all the data in it is the fictional case data.
 
-It's deliberately simple: plain HTML, CSS and JavaScript. No framework, no build step, no server. All the data lives in one bundled file (`assets/data.js`) and nothing ever gets sent anywhere.
+It is a static web app: plain HTML, CSS and JavaScript, no libraries, no server and no build step. The data is bundled in `assets/data.js` and nothing gets sent anywhere.
 
-## What you can do in it
+## Screens
 
-- **Overview** – the big picture first
-- **Network Explorer** – the supply network as a map, by component, or by zone
-- **Supplier 360** – everything we know about one supplier on a single page
-- **Risk Intelligence** – where the risk actually sits and what to do about it
-- **External Risk Intelligence** – outside events that could hit the network
-- **Alternate Supplier Intelligence** – shortlisted backup suppliers and how well they fit
-- **Scenario Lab** – "what if this supplier goes down?" simulations
-- **Evidence Center** – the sources behind the numbers
-- **Methodology** and **Help** – how scoring works and how to use the app
+- Overview
+- Network Explorer (map, components and zones views)
+- Supplier 360
+- Risk Intelligence
+- External Risk Intelligence (events)
+- Alternate Supplier Intelligence
+- Scenario Lab
+- Evidence Center
+- Methodology
+- Help
 
-There's also an **Ask Lighthouse** panel for quick questions, and a short welcome tour the first time you open the app.
+There is also an Ask Lighthouse panel and a welcome tour that shows up on the first visit.
 
-## Run it locally
+## Running it locally
 
 ```
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000. Double-clicking `index.html` usually works too, but if something looks off, use the server.
+Then open http://localhost:8000. Opening `index.html` directly from disk also works in most browsers.
 
-## Deploy it on Vercel
+## Deploying on Vercel
 
-There are three ways to do it. All of them need zero configuration. No build command, no environment variables. `vercel.json` already handles the output directory, security headers and asset caching.
+No build command and no environment variables are needed. `vercel.json` already has the output directory, security headers and asset caching set up.
 
-**Vercel CLI**
+**Option A: Vercel CLI**
 
 ```
 npm i -g vercel
 cd novadrive_lighthouse
-vercel            # preview deploy, accept the defaults (Framework: Other, no build command)
+vercel            # preview, accept the defaults (Framework: Other, no build command)
 vercel --prod     # production
 ```
 
-**Import from GitHub**
+**Option B: GitHub import**
 
-1. Push this folder to a GitHub repo, with these files at the repo root.
-2. On vercel.com, go to Add New → Project and import the repo.
-3. Set Framework Preset to **Other**, leave Build Command empty, and keep Output Directory as `.` (it's already set in `vercel.json`).
+1. Push this folder to a GitHub repo (the files go at the repo root).
+2. On vercel.com, Add New > Project, and import the repo.
+3. Framework Preset: Other. Build Command: leave empty. Output Directory: `.` (already set in `vercel.json`).
 4. Deploy.
 
-**Drag and drop**
+**Option C: drag and drop**
 
-Go to vercel.com/new and drop the unzipped folder in.
+Go to vercel.com/new and drag the unzipped folder in.
 
-GitHub Pages works as well. Serve the folder root as is. Routing uses `#/...` hashes, so you don't need any rewrite rules.
+GitHub Pages also works if you serve the folder root as it is. Routing uses `#/...` hashes, so no rewrites are needed.
 
-## How the folder is laid out
+## Folder layout
 
 ```
 index.html            app shell
 assets/data.js        generated data bundle (suppliers, links, events, alternates, evidence, assumptions)
 assets/logic.js       risk actions, impact propagation, scenario and sensitivity logic (no DOM)
 assets/ui.js          UI kit, router, search, tooltips, cross-filter context
-assets/p_*.js         one file per screen; p_ask.js is Ask Lighthouse; boot.js starts everything up
+assets/p_*.js         one file per screen; p_ask.js is Ask Lighthouse; boot.js is the start-up
 assets/styles.css     design system
 build/                Python that regenerates assets/data.js from data/ and source_inputs/
-data/, source_inputs/ where the numbers came from: scorecard v2 export, tiering workbook, geometry
+data/, source_inputs/ provenance: scorecard v2 export, tiering workbook, geometry
 ```
 
-If you change anything in the source files, rebuild the data bundle:
+To rebuild the data bundle after editing the sources:
 
 ```
 python3 build/build_lighthouse_data.py
 ```
 
-## Read this before you present it
+## Things to know before presenting
 
-A few things that are easy to misread, so better to say them up front:
-
-- **Scores come from scorecard v2.** Jade 69.0, IonPeak 65.3, Orion 57.5, Meridian 57.4. Confidence never changes a risk percentage.
-- **USD 1.56B is not supplier spend, and it's not revenue at risk.** It's NovaDrive's annual *product revenue* that sits behind the IonPeak dependency.
-- **Alternates are shortlisted candidates, not recommendations.** Every fit rating is company-claimed, pulled from public pages, and still needs sourcing and engineering validation. Schweizer's six factor ratings are my own reading of the Phase 2 write-up (flagged as A16), and Orion/CeramTec's 16 weeks is a stand-in taken from the parent component.
-- **The India zone map is illustrative.** Zones Z01 to Z08 are made up. Only Z01 "East Delta" is actually named in the case.
-- **Scenario Lab runs simulations, not real events.** It doesn't model inventory, recovery time or lost revenue.
-- **Ask Lighthouse isn't a live language model.** It answers a fixed set of question types using the same data and logic as the rest of the app.
-- **Action labels are a refinement of the scorecard's "next step".** For example, "Search alternate now" gets split into SEARCH ALTERNATE, REVIEW, QUALIFY or VERIFY FIRST. The original next step is still visible under "Why this action?".
+- Scores are from scorecard v2 (Jade 69.0, IonPeak 65.3, Orion 57.5, Meridian 57.4). Confidence never changes a risk %.
+- USD 1.56B is the annual NovaDrive product revenue behind the IonPeak dependency. It is not supplier spend and it is not revenue at risk.
+- The alternates are shortlisted candidates only. Every fit rating is company-claimed (taken from public pages) and would still need sourcing and engineering validation. The six-factor ratings for Schweizer are my own, derived from the Phase 2 text (flagged A16). The 16 weeks for Orion/CeramTec is a stand-in from the parent component.
+- The India zone map is illustrative. Zones Z01 to Z08 are fictional, and only Z01 "East Delta" is named in the case.
+- Scenario Lab outputs are simulations, not actual events. It does not model inventory, recovery or lost revenue.
+- Ask Lighthouse is not a live language model. It answers a fixed set of question types from the same data and logic as the rest of the app.
+- The action labels refine the scorecard's "next step" (for example, "Search alternate now" is split into SEARCH ALTERNATE, REVIEW, QUALIFY and VERIFY FIRST). The original next step is still visible under "Why this action?".
 
 ## Architecture
 
